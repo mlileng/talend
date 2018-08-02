@@ -1,0 +1,36 @@
+package routines;
+
+import org.slf4j.helpers.MessageFormatter;
+
+/*
+ * This function is generating dynamic SQL/HQL.
+ */
+public class GenerateDynamicSQL {
+
+    /**
+     * This method is used for dynamically generating the columns 
+     * for the datasource digital attributes. It assumes that there 
+     * is a column called INDIVIDUAL_ID, which will be typed as STRING. 
+     * All other columns will be typed SMALLINT.
+     * 
+     * The method is depending on the MessgeFormatter class in slf4j. 
+     * The slf4j library needs to be added as a dependency for this routine:
+     * When routine is not open, right-click on the "GenerateDynamicSQL" routine 
+     * from the left Repository view. Choose to"Edit routine libraries". 
+     * Choose new. From Platform drop-down, choose slf4j-api-1.6.1.jar (version may vary). 
+     * Click ok, then finish. This should resolve compile error.
+     * 
+     * @author Morten Lileng <mlileng@merkleinc.com>
+     * 
+     *      */
+	public static String format_M1_digital_segments(String inputDelimiter, String sql, String columns) {
+		if(inputDelimiter != null && columns != null) {
+			columns = columns.replaceAll(inputDelimiter, " SMALLINT," + System.lineSeparator());
+			columns = columns.replaceAll("INDIVIDUAL_ID SMALLINT", " INDIVIDUAL_ID STRING");
+			columns = columns.concat(" SMALLINT"+ System.lineSeparator());
+		}
+		Object[] objs = new Object[1];
+		objs[0] = columns;
+	    return MessageFormatter.arrayFormat(sql, objs).getMessage();
+	}
+}
